@@ -16,10 +16,16 @@ spring:
       server:
         webflux:
           routes:
-            - id: front
+            - id: api-rates
+              uri: lb://exchange
+              predicates:
+                - Path=/api/rates
+            - id: front-ui
               uri: lb://front-ui
               predicates:
                 - Path=/**
+          default-filters:
+            - PreserveHostHeader
   autoconfigure:
     exclude:
       - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
