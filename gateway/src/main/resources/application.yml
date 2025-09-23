@@ -13,11 +13,13 @@ spring:
         prefer-ip-address: true
         health-check-path: /actuator/health
     gateway:
-      routes:
-        - id: front
-          uri: lb://front-ui
-          predicates:
-            - Path=/**
+      server:
+        webflux:
+          routes:
+            - id: front
+              uri: lb://front-ui
+              predicates:
+                - Path=/**
   autoconfigure:
     exclude:
       - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
