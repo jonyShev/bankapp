@@ -10,5 +10,11 @@
     </parent>
 
     <artifactId>front-ui</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>com.jonyshev</groupId>
+            <artifactId>commons</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>
