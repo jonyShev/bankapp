@@ -1,3 +1,30 @@
+server:
+  port: 8080
+
 spring:
   application:
     name: gateway
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        register: true
+        prefer-ip-address: true
+        health-check-path: /actuator/health
+    gateway:
+      routes:
+        - id: front
+          uri: lb://front-ui
+          predicates:
+            - Path=/**
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
