@@ -1,0 +1,37 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: exchange-generator
+  cloud:
+    consul:
+      host: consul
+      port: 8500
+      discovery:
+        register: true
+        prefer-ip-address: true
+        health-check-path: /actuator/health
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+  thymeleaf:
+    check-template-location: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,scheduledtasks,metrics
+
+resilience4j:
+  retry:
+    instances:
+      push:
+        maxAttempts: 3
+        waitDuration: 200ms
+logging:
+  level:
+    io.github.resilience4j: DEBUG
+    org.springframework.web.reactive.function.client: DEBUG
