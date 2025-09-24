@@ -12,10 +12,16 @@ spring:
         register: true
         prefer-ip-address: true
         health-check-path: /actuator/health
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+  datasource:
+    url: jdbc:postgresql://postgres:5432/bank
+    username: bank
+    password: bank
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
 
 management:
   endpoints:
