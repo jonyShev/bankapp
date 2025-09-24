@@ -1,0 +1,16 @@
+{
+  "realm": "bank",
+  "enabled": true,
+  "clients": [
+    {
+      "clientId": "exchange-generator",
+      "name": "exchange-generator",
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "serviceAccountsEnabled": true,
+      "secret": "gen-secret",
+      "directAccessGrantsEnabled": false,
+      "standardFlowEnabled": false
+    }
+  ]
+}
