@@ -1,0 +1,73 @@
+services:
+  consul:
+    image: hashicorp/consul:1.16
+    command: agent -dev -client=0.0.0.0
+    ports:
+      - "8500:8500"
+    networks:
+      - banknet
+
+  gateway:
+    build:
+      context: .
+      dockerfile: gateway/Dockerfile
+      args:
+        MODULE: gateway
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    ports:
+      - "8080:8080"
+    depends_on:
+      - consul
+      - front-ui
+      - exchange
+    networks:
+      - banknet
+
+  front-ui:
+    build:
+      context: .
+      dockerfile: front-ui/Dockerfile
+      args:
+        MODULE: front-ui
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    expose:
+      - "8081"
+    depends_on:
+      - consul
+    networks:
+      - banknet
+
+  exchange:
+    build:
+      context: .
+      dockerfile: exchange/Dockerfile
+      args:
+        MODULE: exchange
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    expose:
+      - "8082"
+    depends_on:
+      - consul
+    networks:
+      - banknet
+
+  exchange-generator:
+    build:
+      context: .
+      dockerfile: exchange-generator/Dockerfile
+      args:
+        MODULE: exchange-generator
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - consul
+      - exchange
+    networks:
+      - banknet
+
+networks:
+  banknet:
+    driver: bridge
