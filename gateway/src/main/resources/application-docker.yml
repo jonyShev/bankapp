@@ -20,16 +20,16 @@ spring:
               uri: lb://exchange
               predicates:
                 - Path=/api/rates
+            - id: accounts-api
+              uri: lb://accounts
+              predicates:
+                - Path=/api/users, /api/users/*, /api/internal/**
             - id: front-ui
               uri: lb://front-ui
               predicates:
                 - Path=/**
           default-filters:
             - PreserveHostHeader
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
 
 management:
   endpoints:
