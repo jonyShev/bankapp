@@ -18,15 +18,19 @@ spring:
         jwt:
           issuer-uri: http://keycloak:8080/realms/bank
   datasource:
-    url: jdbc:postgresql://postgres:5432/bank
+    url: jdbc:postgresql://postgres:5432/bank?currentSchema=exchange
     username: bank
     password: bank
   jpa:
     hibernate:
       ddl-auto: validate
+      default_schema: exchange
   flyway:
     enabled: true
     baseline-on-migrate: true
+    default-schema: exchange
+    schemas: exchange
+    table: flyway_schema_history_exchange
 
 management:
   endpoints:

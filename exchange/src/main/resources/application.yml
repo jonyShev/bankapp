@@ -18,18 +18,22 @@ spring:
         jwt:
           issuer-uri: http://localhost:8084/realms/bank
   datasource:
-    url: jdbc:postgresql://localhost:5432/bank
+    url: jdbc:postgresql://localhost:5432/bank?currentSchema=exchange
     username: bank
     password: bank
   jpa:
     hibernate:
       ddl-auto: validate
+      default_schema: exchange
     properties:
       hibernate.format_sql: true
       hibernate.jdbc.time_zone: UTC
   flyway:
     enabled: true
     baseline-on-migrate: true
+    default-schema: exchange
+    schemas: exchange
+    table: flyway_schema_history_exchange
 
 management:
   endpoints:
