@@ -15,8 +15,16 @@ services:
       - POSTGRES_PASSWORD=bank
     ports:
       - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
+    networks:
+      - banknet
+
+  adminer:
+    image: adminer
+    restart: unless-stopped
+    ports:
+      - "8089:8080"
+    depends_on:
+      - postgres
     networks:
       - banknet
 
@@ -97,9 +105,27 @@ services:
     networks:
       - banknet
 
+  accounts:
+    build:
+      context: .
+      dockerfile: accounts/Dockerfile
+      args:
+        MODULE: accounts
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    expose:
+      - "8084"
+    depends_on:
+      - consul
+      - postgres
+    networks:
+      - banknet
+
 networks:
   banknet:
     driver: bridge
 
-volumes:
-  pgdata:
+#debug
+# - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+# ports:
+#  - "5005:5005"
