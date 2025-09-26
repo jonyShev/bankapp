@@ -1,8 +1,8 @@
 package com.jonyshev.accounts.controller;
 
-import com.jonyshev.commons.dto.UserCreateRequest;
-import com.jonyshev.accounts.dto.UserProfileDto;
 import com.jonyshev.accounts.service.AccountService;
+import com.jonyshev.commons.dto.UserCreateRequest;
+import com.jonyshev.commons.dto.UserProfileDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
