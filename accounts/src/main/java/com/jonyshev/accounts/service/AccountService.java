@@ -1,7 +1,7 @@
 package com.jonyshev.accounts.service;
 
 import com.jonyshev.commons.dto.UserCreateRequest;
-import com.jonyshev.accounts.dto.UserProfileDto;
+import com.jonyshev.commons.dto.UserProfileDto;
 import com.jonyshev.accounts.model.AccountEntity;
 import com.jonyshev.accounts.model.UserEntity;
 import com.jonyshev.accounts.repository.AccountRepository;
@@ -56,16 +56,16 @@ public class AccountService {
         userProfileDto.setBirthdate(userEntity.getBirthdate().toString());
         userProfileDto.setAccounts(accountEntityList.stream().map(a -> {
             var accountDto = new UserProfileDto.AccountDto();
-            accountDto.setCurrency(a.getCurrency());
-            accountDto.setValue(a.getValue().toPlainString());
+            accountDto.setCurrency(Currency.valueOf(a.getCurrency()));
+            accountDto.setValue(a.getValue());
             return accountDto;
         }).toList());
         return userProfileDto;
     }
 
     @Transactional(readOnly = true)
-    public boolean checkPassword(String login, String raw) {
+    public boolean checkPassword(String login, String password) {
         var userEntity = userRepository.findByLogin(login).orElse(null);
-        return userEntity != null && encoder.matches(raw, userEntity.getPassHash());
+        return userEntity != null && encoder.matches(password, userEntity.getPassHash());
     }
 }
