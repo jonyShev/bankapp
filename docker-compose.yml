@@ -68,8 +68,11 @@ services:
         MODULE: front-ui
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
     expose:
       - "8081"
+    ports:
+      - "5005:5005"
     depends_on:
       - consul
     networks:
