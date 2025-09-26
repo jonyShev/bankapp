@@ -1,10 +1,9 @@
 package com.jonyshev.front.controller;
 
 import com.jonyshev.commons.model.Currency;
-import com.jonyshev.front.model.ViewModels.AccountVm;
-import com.jonyshev.front.model.ViewModels.UserVm;
 import com.jonyshev.front.service.AccountsClient;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,22 +24,17 @@ public class PagesController {
     }
 
     @GetMapping("/main")
-    public String main(Model model,
-                       @RequestParam(value = "login", required = false, defaultValue = "vasya") String login) {
-        model.addAttribute("login", login);
-        model.addAttribute("name", "Вася Пупкин");
-        model.addAttribute("birthdate", "1990-01-01");
+    public String main(Authentication auth, Model model) {
+        String login = (auth != null ? auth.getName() : "guest");
+        var userProfile = accountsClient.getUserProfile(login);
 
-        model.addAttribute("users", List.of(
-                new UserVm("vasya", "Вася Пупкин", "1990-01-01"),
-                new UserVm("katya", "Катя", "1995-05-05")
-        ));
+        model.addAttribute("login", userProfile.getLogin());
+        model.addAttribute("name", userProfile.getName());
+        model.addAttribute("birthdate", userProfile.getBirthdate());
 
-        model.addAttribute("accounts", List.of(
-                new AccountVm(Currency.RUB, 10_000),
-                new AccountVm(Currency.USD, 200),
-                new AccountVm(Currency.CNY, 150)
-        ));
+        model.addAttribute("accounts", userProfile.getAccounts());
+
+        model.addAttribute("users", List.of(userProfile));
 
         model.addAttribute("currency", Currency.values());
 
