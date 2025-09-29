@@ -1,11 +1,11 @@
 package com.jonyshev.accounts.service;
 
-import com.jonyshev.commons.dto.UserCreateRequest;
-import com.jonyshev.commons.dto.UserProfileDto;
 import com.jonyshev.accounts.model.AccountEntity;
 import com.jonyshev.accounts.model.UserEntity;
 import com.jonyshev.accounts.repository.AccountRepository;
 import com.jonyshev.accounts.repository.UserRepository;
+import com.jonyshev.commons.dto.UserCreateRequest;
+import com.jonyshev.commons.dto.UserProfileDto;
 import com.jonyshev.commons.model.Currency;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -50,22 +51,29 @@ public class AccountService {
     public UserProfileDto getProfile(String login) {
         var userEntity = userRepository.findByLogin(login).orElseThrow();
         var accountEntityList = accountRepository.findAllByUserId(userEntity.getId());
-        var userProfileDto = new UserProfileDto();
-        userProfileDto.setLogin(userEntity.getLogin());
-        userProfileDto.setName(userEntity.getName());
-        userProfileDto.setBirthdate(userEntity.getBirthdate().toString());
-        userProfileDto.setAccounts(accountEntityList.stream().map(a -> {
-            var accountDto = new UserProfileDto.AccountDto();
-            accountDto.setCurrency(Currency.valueOf(a.getCurrency()));
-            accountDto.setValue(a.getValue());
-            return accountDto;
-        }).toList());
-        return userProfileDto;
+        return UserProfileDto.builder()
+                .login(userEntity.getLogin())
+                .name(userEntity.getName())
+                .birthdate(userEntity.getBirthdate().toString())
+                .accounts(accountEntityList.stream().map(a -> {
+                    var accountDto = new UserProfileDto.AccountDto();
+                    accountDto.setCurrency(Currency.valueOf(a.getCurrency()));
+                    accountDto.setValue(a.getValue());
+                    return accountDto;
+                }).toList()).build();
     }
 
     @Transactional(readOnly = true)
     public boolean checkPassword(String login, String password) {
         var userEntity = userRepository.findByLogin(login).orElse(null);
         return userEntity != null && encoder.matches(password, userEntity.getPassHash());
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserProfileDto> getAllUserProfile() {
+        return userRepository.findAll().stream().map(userEntity -> UserProfileDto.builder()
+                .login(userEntity.getLogin())
+                .name(userEntity.getName())
+                .build()).toList();
     }
 }
