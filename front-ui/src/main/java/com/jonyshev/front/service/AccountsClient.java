@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class AccountsClient {
@@ -44,12 +46,22 @@ public class AccountsClient {
     public boolean auth(String login, String password) {
         return Boolean.TRUE.equals(
                 http.build()
-                .post()
-                .uri("http://accounts/api/internal/auth?login={login}&password={password}", login, password)
+                        .post()
+                        .uri("http://accounts/api/internal/auth?login={login}&password={password}", login, password)
+                        .retrieve()
+                        .toBodilessEntity()
+                        .map(resp -> resp.getStatusCode().is2xxSuccessful())
+                        .onErrorReturn(false)
+                        .block());
+    }
+
+    public List<UserProfileDto> getListUserProfile() {
+        return http.build()
+                .get()
+                .uri("http://accounts/api/users")
                 .retrieve()
-                .toBodilessEntity()
-                .map(resp -> resp.getStatusCode().is2xxSuccessful())
-                .onErrorReturn(false)
-                .block());
+                .bodyToFlux(UserProfileDto.class)
+                .collectList()
+                .block();
     }
 }
