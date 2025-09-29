@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -31,5 +33,10 @@ public class AccountsController {
     public ResponseEntity<Void> auth(@RequestParam String login, @RequestParam String password) {
         return accountService.checkPassword(login, password) ? ResponseEntity.ok().build()
                 : ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    @GetMapping("/users")
+    public List<UserProfileDto> getAllUserProfile() {
+        return accountService.getAllUserProfile();
     }
 }
