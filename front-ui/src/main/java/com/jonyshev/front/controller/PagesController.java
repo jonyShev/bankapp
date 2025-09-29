@@ -27,6 +27,7 @@ public class PagesController {
     public String main(Authentication auth, Model model) {
         String login = (auth != null ? auth.getName() : "guest");
         var userProfile = accountsClient.getUserProfile(login);
+        var listUserProfile = accountsClient.getListUserProfile();
 
         model.addAttribute("login", userProfile.getLogin());
         model.addAttribute("name", userProfile.getName());
@@ -34,7 +35,7 @@ public class PagesController {
 
         model.addAttribute("accounts", userProfile.getAccounts());
 
-        model.addAttribute("users", List.of(userProfile));
+        model.addAttribute("users", listUserProfile);
 
         model.addAttribute("currency", Currency.values());
 
