@@ -16,6 +16,10 @@ spring:
       server:
         webflux:
           routes:
+            - id: cash-api
+              uri: lb://cash
+              predicates:
+                - Path=/api/cash/**
             - id: api-rates
               uri: lb://exchange
               predicates:
