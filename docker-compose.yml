@@ -124,6 +124,22 @@ services:
     networks:
       - banknet
 
+  cash:
+    build:
+      context: .
+      dockerfile: cash/Dockerfile
+      args:
+        MODULE: cash
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    expose:
+      - "8085"
+    depends_on:
+      - consul
+      - accounts
+    networks:
+      - banknet
+
 networks:
   banknet:
     driver: bridge
