@@ -16,14 +16,11 @@ public class ExchangeController {
 
     private final RateService rateService;
 
-
-    // Для фронта: GET /api/rates -> список RateDto
     @GetMapping("/api/rates")
     public List<RateDto> getRates() {
         return rateService.getAll();
     }
 
-    // Для генератора: внутреннее обновление одного курса
     @PostMapping("/internal/rates/{code}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void updateRate(@PathVariable("code") String code, @RequestParam("value") BigDecimal value) {
