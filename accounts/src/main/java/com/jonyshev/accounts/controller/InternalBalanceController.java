@@ -19,14 +19,14 @@ public class InternalBalanceController {
     private final BalanceService balanceService;
 
     @PostMapping("/add")
-    public ResponseEntity<Void> add(@RequestParam String login, @RequestParam String currency, @RequestParam String amount) {
-        balanceService.add(login, currency, new BigDecimal(amount));
+    public ResponseEntity<Void> add(@RequestParam String login, @RequestParam String currency, @RequestParam BigDecimal amount) {
+        balanceService.add(login, currency, amount);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/sub")
-    public ResponseEntity<Void> sub(@RequestParam String login, @RequestParam String currency, @RequestParam String amount) {
-        boolean ok = balanceService.sub(login, currency, new BigDecimal(amount));
+    public ResponseEntity<Void> sub(@RequestParam String login, @RequestParam String currency, @RequestParam BigDecimal amount) {
+        boolean ok = balanceService.sub(login, currency, amount);
         return ok ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 }
