@@ -16,6 +16,14 @@ spring:
       server:
         webflux:
           routes:
+            - id: transfer-api
+              uri: lb://transfer
+              predicates:
+                - Path=/api/transfer/**
+            - id: blocker-api
+              uri: lb://blocker
+              predicates:
+                - Path=/api/block/**
             - id: cash-api
               uri: lb://cash
               predicates:
