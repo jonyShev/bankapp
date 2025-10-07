@@ -16,6 +16,10 @@ spring:
       server:
         webflux:
           routes:
+            - id: notifications-api
+              uri: lb://notifications
+              predicates:
+                - Path=/api/notify/**
             - id: transfer-api
               uri: lb://transfer
               predicates:
