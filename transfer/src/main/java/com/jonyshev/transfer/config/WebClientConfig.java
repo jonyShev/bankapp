@@ -1,5 +1,6 @@
 package com.jonyshev.transfer.config;
 
+import com.jonyshev.commons.client.NotificationsClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +12,11 @@ public class WebClientConfig {
     @LoadBalanced
     WebClient.Builder http() {
         return WebClient.builder();
+    }
+
+    @Bean
+    NotificationsClient notificationsClient(WebClient.Builder http) {
+        return new NotificationsClient(http);
     }
 
 }
