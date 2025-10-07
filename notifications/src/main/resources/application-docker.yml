@@ -6,7 +6,7 @@ spring:
     name: notifications
   cloud:
     consul:
-      host: localhost
+      host: consul
       port: 8500
       discovery:
         register: true
