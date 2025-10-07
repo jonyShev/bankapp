@@ -1,5 +1,7 @@
 package com.jonyshev.transfer.service;
 
+import com.jonyshev.commons.client.NotificationsClient;
+import com.jonyshev.commons.model.EventType;
 import com.jonyshev.transfer.client.AccountsClient;
 import com.jonyshev.transfer.client.BlockerClient;
 import com.jonyshev.transfer.client.ExchangeClient;
@@ -19,16 +21,25 @@ public class TransferService {
     private final ExchangeClient exchangeClient;   // Map<String, BigDecimal> rates()
     private final AccountsClient accountsClient;   // add/sub(String, String, BigDecimal)
     private final BlockerClient blockerClient;     // check(String, String, BigDecimal) -> "" | error
+    private final NotificationsClient notificationsClient;
 
     public record Result(boolean ok, String error) {
     }
 
     public Result transferSelf(String login, String fromCur, String toCur, BigDecimal amount) {
-        return doTransfer(login, login, fromCur, toCur, amount);
+        var result =  doTransfer(login, login, fromCur, toCur, amount);
+        if (result.ok){
+            notificationsClient.send(EventType.TRANSFER_SELF, login, fromCur + " to " + toCur + " " + amount);
+        }
+        return result;
     }
 
     public Result transferToOther(String fromLogin, String toLogin, String fromCur, String toCur, BigDecimal amount) {
-        return doTransfer(fromLogin, toLogin, fromCur, toCur, amount);
+        var result =  doTransfer(fromLogin, toLogin, fromCur, toCur, amount);
+        if (result.ok){
+            notificationsClient.send(EventType.TRANSFER_SELF, fromLogin + " to " + toLogin, fromCur + " to " + toCur + " " + amount);
+        }
+        return result;
     }
 
     // ===== helpers =====

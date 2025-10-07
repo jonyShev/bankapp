@@ -1,5 +1,7 @@
 package com.jonyshev.cash.service;
 
+import com.jonyshev.commons.client.NotificationsClient;
+import com.jonyshev.commons.model.EventType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -14,17 +16,26 @@ import java.math.BigDecimal;
 public class AccountsClient {
 
     private final WebClient.Builder http;
+    private final NotificationsClient notificationsClient;
 
     private WebClient client() {
         return http.baseUrl("http://accounts/api/internal").build();
     }
 
     public boolean add(String login, String currency, BigDecimal amount) {
-        return postWithParams("/add", login, currency, amount);
+        var response = postWithParams("/add", login, currency, amount);
+        if (response) {
+            notificationsClient.send(EventType.CASH_DEPOSIT, login, currency + " " + amount);
+        }
+        return response;
     }
 
     public boolean sub(String login, String currency, BigDecimal amount) {
-        return postWithParams("/sub", login, currency, amount);
+        var response = postWithParams("/sub", login, currency, amount);
+        if (response) {
+            notificationsClient.send(EventType.CASH_WITHDRAW, login, currency + " " + amount);
+        }
+        return response;
     }
 
     private boolean postWithParams(String path, String login, String currency, BigDecimal amount) {
