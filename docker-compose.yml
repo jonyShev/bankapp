@@ -181,6 +181,21 @@ services:
     networks:
       - banknet
 
+  notifications:
+    build:
+      context: .
+      dockerfile: notifications/Dockerfile
+      args:
+        MODULE: notifications
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    expose:
+      - "8088"
+    depends_on:
+      - consul
+    networks:
+      - banknet
+
 networks:
   banknet:
     driver: bridge
