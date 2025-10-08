@@ -1,8 +1,8 @@
-package com.jonyshev.front.service;
+package com.jonyshev.front.client;
 
 import com.jonyshev.commons.dto.UserCreateRequest;
 import com.jonyshev.commons.dto.UserProfileDto;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -11,10 +11,13 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class AccountsClient {
 
     private final WebClient.Builder http;
+
+    public AccountsClient(@Qualifier("securedWebClientBuilder") WebClient.Builder http) {
+        this.http = http;
+    }
 
     public boolean createUser(String login, String name, String password, String birthdate) {
         var request = UserCreateRequest.builder()

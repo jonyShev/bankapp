@@ -1,15 +1,18 @@
-package com.jonyshev.front.service;
+package com.jonyshev.front.client;
 
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
-@RequiredArgsConstructor
 public class CashClient {
 
     private final WebClient.Builder http;
+
+    public CashClient(@Qualifier("plainWebClientBuilder") WebClient.Builder http) {
+        this.http = http;
+    }
 
     public String deposit(String login, String currency, String amount) {
         return callCash("/deposit", login, currency, amount);
