@@ -2,8 +2,8 @@ package com.jonyshev.front.controller;
 
 import com.jonyshev.commons.model.Currency;
 import com.jonyshev.front.client.TransferClient;
-import com.jonyshev.front.service.AccountsClient;
-import com.jonyshev.front.service.CashClient;
+import com.jonyshev.front.client.AccountsClient;
+import com.jonyshev.front.client.CashClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
