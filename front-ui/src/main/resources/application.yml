@@ -12,6 +12,19 @@ spring:
         register: true
         prefer-ip-address: true
         health-check-path: /actuator/health
+  security:
+    oauth2:
+      client:
+        registration:
+          front-ui:
+            provider: keycloak
+            client-id: front-ui
+            client-secret: front-ui-secret
+            authorization-grant-type: client_credentials
+        provider:
+          keycloak:
+            token-uri: http://localhost:8084/realms/bank/protocol/openid-connect/token
+
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
@@ -28,5 +41,10 @@ management:
         include: health,info
 logging:
   level:
+    org.springframework.web.reactive.function.client.ExchangeFunctions: DEBUG
+    org.springframework.web.reactive.function.client.ExchangeFilterFunctions: DEBUG
+    org.springframework.web.reactive.function.client: DEBUG
+    org.springframework.http.client: DEBUG
+    reactor.netty.http.client: DEBUG
     root: INFO
     org.springframework.web: DEBUG
