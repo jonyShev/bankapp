@@ -1,14 +1,17 @@
 package com.jonyshev.front.client;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
-@RequiredArgsConstructor
 public class TransferClient {
 
     private final WebClient.Builder http;
+
+    public TransferClient(@Qualifier("plainWebClientBuilder") WebClient.Builder http) {
+        this.http = http;
+    }
 
     private WebClient client() {
         return http.baseUrl("http://transfer/api/transfer").build();
