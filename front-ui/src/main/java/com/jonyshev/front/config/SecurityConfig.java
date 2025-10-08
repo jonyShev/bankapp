@@ -1,6 +1,6 @@
 package com.jonyshev.front.config;
 
-import com.jonyshev.front.service.AccountsClient;
+import com.jonyshev.front.client.AccountsClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
