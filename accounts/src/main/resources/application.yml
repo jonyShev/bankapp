@@ -12,6 +12,11 @@ spring:
         register: true
         prefer-ip-address: true
         health-check-path: /actuator/health
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8084/realms/bank
   datasource:
     url: jdbc:postgresql://localhost:5432/bank?currentSchema=accounts
     username: bank
