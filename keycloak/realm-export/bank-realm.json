@@ -11,6 +11,36 @@
       "secret": "gen-secret",
       "directAccessGrantsEnabled": false,
       "standardFlowEnabled": false
+    },
+    {
+      "clientId": "cash",
+      "name": "cash",
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "serviceAccountsEnabled": true,
+      "secret": "cash-secret",
+      "directAccessGrantsEnabled": false,
+      "standardFlowEnabled": false
+    },
+    {
+      "clientId": "transfer",
+      "name": "transfer",
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "serviceAccountsEnabled": true,
+      "secret": "transfer-secret",
+      "directAccessGrantsEnabled": false,
+      "standardFlowEnabled": false
+    },
+    {
+      "clientId": "front-ui",
+      "name": "front-ui",
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "serviceAccountsEnabled": true,
+      "secret": "front-ui-secret",
+      "directAccessGrantsEnabled": false,
+      "standardFlowEnabled": false
     }
   ]
 }
