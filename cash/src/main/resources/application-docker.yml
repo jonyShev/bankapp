@@ -12,6 +12,18 @@ spring:
         register: true
         prefer-ip-address: true
         health-check-path: /actuator/health
+  security:
+    oauth2:
+      client:
+        registration:
+          cash:
+            provider: keycloak
+            client-id: cash
+            client-secret: cash-secret
+            authorization-grant-type: client_credentials
+        provider:
+          keycloak:
+            token-uri: http://keycloak:8080/realms/bank/protocol/openid-connect/token
 
 management:
   endpoints:
