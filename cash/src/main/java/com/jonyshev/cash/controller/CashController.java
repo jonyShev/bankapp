@@ -1,6 +1,6 @@
 package com.jonyshev.cash.controller;
 
-import com.jonyshev.cash.service.AccountsClient;
+import com.jonyshev.cash.client.AccountsClient;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
