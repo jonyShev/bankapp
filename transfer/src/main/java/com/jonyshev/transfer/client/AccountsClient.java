@@ -1,5 +1,7 @@
 package com.jonyshev.transfer.client;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -27,6 +29,8 @@ public class AccountsClient {
         return postWithParams("/sub", login, currency, amount);
     }
 
+    @Retry(name = "s2s")
+    @CircuitBreaker(name = "s2s")
     private boolean postWithParams(String path, String login, String currency, BigDecimal amount) {
         Mono<ResponseEntity<Void>> mono = client()
                 .post()

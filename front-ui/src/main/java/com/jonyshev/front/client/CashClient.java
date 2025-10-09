@@ -1,6 +1,8 @@
 package com.jonyshev.front.client;
 
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -22,6 +24,8 @@ public class CashClient {
         return callCash("/withdraw", login, currency, amount);
     }
 
+    @Retry(name="s2s")
+    @CircuitBreaker(name="s2s")
     private String callCash(String action, String login, String currency, String amount) {
         return http.baseUrl("http://cash/api/cash").build()
                 .post()

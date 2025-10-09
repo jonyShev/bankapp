@@ -1,5 +1,7 @@
 package com.jonyshev.front.client;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -17,6 +19,8 @@ public class TransferClient {
         return http.baseUrl("http://transfer/api/transfer").build();
     }
 
+    @Retry(name="s2s")
+    @CircuitBreaker(name="s2s")
     public String transferSelf(String login, String from, String to, String amount) {
         return client().post()
                 .uri(uri -> uri.path("/self")
@@ -32,6 +36,8 @@ public class TransferClient {
                 .block();
     }
 
+    @Retry(name="s2s")
+    @CircuitBreaker(name="s2s")
     public String transferToOther(String fromLogin, String toLogin, String from, String to, String amount) {
         return client().post()
                 .uri(uri -> uri.path("/to-other")

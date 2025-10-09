@@ -2,6 +2,8 @@ package com.jonyshev.front.client;
 
 import com.jonyshev.commons.dto.UserCreateRequest;
 import com.jonyshev.commons.dto.UserProfileDto;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,8 @@ public class AccountsClient {
         this.http = http;
     }
 
+    @Retry(name="s2s")
+    @CircuitBreaker(name="s2s")
     public boolean createUser(String login, String name, String password, String birthdate) {
         var request = UserCreateRequest.builder()
                 .login(login)
@@ -37,6 +41,8 @@ public class AccountsClient {
                 .orElse(false);
     }
 
+    @Retry(name="s2s")
+    @CircuitBreaker(name="s2s")
     public UserProfileDto getUserProfile(String login) {
         return http.build()
                 .get()
@@ -46,6 +52,8 @@ public class AccountsClient {
                 .block();
     }
 
+    @Retry(name="s2s")
+    @CircuitBreaker(name="s2s")
     public boolean auth(String login, String password) {
         return Boolean.TRUE.equals(
                 http.build()
@@ -58,6 +66,8 @@ public class AccountsClient {
                         .block());
     }
 
+    @Retry(name="s2s")
+    @CircuitBreaker(name="s2s")
     public List<UserProfileDto> getListUserProfile() {
         return http.build()
                 .get()

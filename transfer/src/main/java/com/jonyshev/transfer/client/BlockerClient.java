@@ -1,5 +1,7 @@
 package com.jonyshev.transfer.client;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -19,6 +21,8 @@ public class BlockerClient {
     /**
      * Возвращает "" если всё ок, иначе текстовый код ошибки (например, "blocked_limit").
      */
+    @Retry(name = "s2s")
+    @CircuitBreaker(name = "s2s")
     public String check(String login, String currency, BigDecimal amount) {
         return client().post()
                 .uri(u -> u.path("/block")

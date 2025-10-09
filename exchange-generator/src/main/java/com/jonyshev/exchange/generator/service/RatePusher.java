@@ -2,6 +2,7 @@ package com.jonyshev.exchange.generator.service;
 
 
 import com.jonyshev.commons.model.Currency;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -24,7 +25,8 @@ public class RatePusher {
     );
 
     @Scheduled(fixedRate = 1000)
-    @Retry(name = "push")
+    @Retry(name="s2s")
+    @CircuitBreaker(name="s2s")
     public void tick() {
         for (var entry : base.entrySet()) {
             var key = entry.getKey();
