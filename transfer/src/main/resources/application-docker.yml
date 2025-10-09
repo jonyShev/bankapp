@@ -25,6 +25,18 @@ spring:
           keycloak:
             token-uri: http://keycloak:8080/realms/bank/protocol/openid-connect/token
 
+resilience4j:
+  retry:
+    instances:
+      s2s:
+        maxAttempts: 3
+        waitDuration: 200ms
+  circuitbreaker:
+    instances:
+      s2s:
+        slidingWindowSize: 20
+        failureRateThreshold: 50
+
 management:
   endpoints:
     web:

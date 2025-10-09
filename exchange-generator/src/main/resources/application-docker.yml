@@ -36,9 +36,15 @@ management:
 resilience4j:
   retry:
     instances:
-      push:
+      s2s:
         maxAttempts: 3
         waitDuration: 200ms
+  circuitbreaker:
+    instances:
+      s2s:
+        slidingWindowSize: 20
+        failureRateThreshold: 50
+
 logging:
   level:
     io.github.resilience4j: DEBUG

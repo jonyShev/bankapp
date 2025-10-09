@@ -33,6 +33,18 @@ spring:
       - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
       - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
 
+resilience4j:
+  retry:
+    instances:
+      s2s:
+        maxAttempts: 3
+        waitDuration: 200ms
+  circuitbreaker:
+    instances:
+      s2s:
+        slidingWindowSize: 20
+        failureRateThreshold: 50
+
 management:
   endpoints:
     web:
