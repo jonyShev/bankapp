@@ -39,7 +39,7 @@ spring:
             - id: accounts-api
               uri: lb://accounts
               predicates:
-                - Path=/api/users, /api/users/*, /api/internal/**
+                - Path=/api/users, /api/users/*
             - id: front-ui
               uri: lb://front-ui
               predicates:
