@@ -21,8 +21,8 @@ public class AccountsClient {
         this.http = http;
     }
 
-    @Retry(name="s2s")
-    @CircuitBreaker(name="s2s")
+    @Retry(name = "s2s")
+    @CircuitBreaker(name = "s2s")
     public boolean createUser(String login, String name, String password, String birthdate) {
         var request = UserCreateRequest.builder()
                 .login(login)
@@ -41,8 +41,8 @@ public class AccountsClient {
                 .orElse(false);
     }
 
-    @Retry(name="s2s")
-    @CircuitBreaker(name="s2s")
+    @Retry(name = "s2s")
+    @CircuitBreaker(name = "s2s")
     public UserProfileDto getUserProfile(String login) {
         return http.build()
                 .get()
@@ -52,8 +52,8 @@ public class AccountsClient {
                 .block();
     }
 
-    @Retry(name="s2s")
-    @CircuitBreaker(name="s2s")
+    @Retry(name = "s2s")
+    @CircuitBreaker(name = "s2s")
     public boolean auth(String login, String password) {
         return Boolean.TRUE.equals(
                 http.build()
@@ -66,8 +66,8 @@ public class AccountsClient {
                         .block());
     }
 
-    @Retry(name="s2s")
-    @CircuitBreaker(name="s2s")
+    @Retry(name = "s2s")
+    @CircuitBreaker(name = "s2s")
     public List<UserProfileDto> getListUserProfile() {
         return http.build()
                 .get()
@@ -75,6 +75,55 @@ public class AccountsClient {
                 .retrieve()
                 .bodyToFlux(UserProfileDto.class)
                 .collectList()
+                .block();
+    }
+
+    @Retry(name = "s2s")
+    @CircuitBreaker(name = "s2s")
+    public boolean changePassword(String login, String password, String confirm) {
+        var body = """
+                {"login":"%s","password":"%s","confirm":"%s"}
+                """.formatted(login, password, confirm);
+        return Boolean.TRUE.equals(http.build()
+                .post().uri("http://accounts/api/internal/password")
+                .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                .bodyValue(body)
+                .exchangeToMono(r -> reactor.core.publisher.Mono.just(r.statusCode().is2xxSuccessful()))
+                .block());
+    }
+
+    @Retry(name = "s2s")
+    @CircuitBreaker(name = "s2s")
+    public String updateProfile(String login, String name, String birthdate) {
+        var body = """
+                {"login":"%s","name":"%s","birthdate":"%s"}
+                """.formatted(login, name, birthdate);
+        return http.build()
+                .post().uri("http://accounts/api/internal/profile")
+                .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                .bodyValue(body)
+                .exchangeToMono(r -> r.statusCode().is2xxSuccessful()
+                        ? reactor.core.publisher.Mono.just("")
+                        : r.bodyToMono(String.class))
+                .block();
+    }
+
+    @Retry(name = "s2s")
+    @CircuitBreaker(name = "s2s")
+    public String updateAccounts(String login, java.util.List<String> currencies) {
+        var jsonArray = (currencies == null || currencies.isEmpty())
+                ? "[]"
+                : currencies.stream().map(s -> "\"" + s + "\"").collect(java.util.stream.Collectors.joining(",", "[", "]"));
+        var body = """
+                {"login":"%s","accounts":%s}
+                """.formatted(login, jsonArray);
+        return http.build()
+                .post().uri("http://accounts/api/internal/accounts")
+                .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                .bodyValue(body)
+                .exchangeToMono(r -> r.statusCode().is2xxSuccessful()
+                        ? reactor.core.publisher.Mono.just("")
+                        : r.bodyToMono(String.class))
                 .block();
     }
 }
