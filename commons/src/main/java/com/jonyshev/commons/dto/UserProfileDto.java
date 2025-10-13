@@ -19,9 +19,6 @@ public class UserProfileDto {
     public static class AccountDto {
         private Currency currency;
         private BigDecimal value;
-
-        public boolean isExists() {
-            return value != null && value.signum() > 0;
-        }
+        private boolean exists;
     }
 }
