@@ -21,11 +21,6 @@ public class UserEntity {
         if (id == null) id = UUID.randomUUID();
     }
 
-    @PreUpdate
-    void onUpdate() {
-        birthdate = LocalDate.now();
-    }
-
     @Column(nullable = false, unique = true, length = 64)
     private String login;
 
