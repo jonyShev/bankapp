@@ -37,7 +37,7 @@ public class TransferService {
     public Result transferToOther(String fromLogin, String toLogin, String fromCur, String toCur, BigDecimal amount) {
         var result =  doTransfer(fromLogin, toLogin, fromCur, toCur, amount);
         if (result.ok){
-            notificationsClient.send(EventType.TRANSFER_SELF, fromLogin + " to " + toLogin, fromCur + " to " + toCur + " " + amount);
+            notificationsClient.send(EventType.TRANSFER_TO, fromLogin + " to " + toLogin, fromCur + " to " + toCur + " " + amount);
         }
         return result;
     }
