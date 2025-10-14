@@ -6,6 +6,24 @@ services:
       - "8500:8500"
     networks:
       - banknet
+    healthcheck:
+      test: [ "CMD", "curl", "-sf", "http://localhost:8500/v1/status/leader" ]
+      interval: 2s
+      timeout: 1s
+      retries: 30
+
+  kv-seeder:
+    image: alpine:3.20
+    depends_on:
+      consul:
+        condition: service_healthy
+    networks:
+      - banknet
+    volumes:
+      - ./consul/kv/application.properties:/seed/application.properties:ro
+      - ./consul/kv/seed-kv.sh:/seed/seed-kv.sh:ro
+    entrypoint: /bin/sh -c "apk add --no-cache curl >/dev/null && /bin/sh /seed/seed-kv.sh"
+    restart: "no"
 
   postgres:
     image: postgres:16
@@ -70,6 +88,7 @@ services:
         MODULE: front-ui
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_CONFIG_IMPORT=optional:consul:consul:8500
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
     expose:
       - "8081"
@@ -137,6 +156,7 @@ services:
         MODULE: cash
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_CONFIG_IMPORT=optional:consul:consul:8500
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5007
     expose:
       - "8085"
@@ -171,6 +191,7 @@ services:
         MODULE: transfer
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_CONFIG_IMPORT=optional:consul:consul:8500
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5006
     expose:
       - "8087"
