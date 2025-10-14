@@ -4,6 +4,8 @@ server:
 spring:
   application:
     name: cash
+  config:
+    import: optional:consul
   cloud:
     consul:
       host: localhost
@@ -12,6 +14,12 @@ spring:
         register: true
         prefer-ip-address: true
         health-check-path: /actuator/health
+      config:
+        enabled: true
+        format: properties
+        prefixes: config
+        defaultContext: application
+        data-key: data
   security:
     oauth2:
       client:
@@ -24,18 +32,6 @@ spring:
         provider:
           keycloak:
             token-uri: http://localhost:8084/realms/bank/protocol/openid-connect/token
-
-resilience4j:
-  retry:
-    instances:
-      s2s:
-        maxAttempts: 3
-        waitDuration: 200ms
-  circuitbreaker:
-    instances:
-      s2s:
-        slidingWindowSize: 20
-        failureRateThreshold: 50
 
 management:
   endpoints:
