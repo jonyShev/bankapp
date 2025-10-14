@@ -35,7 +35,7 @@ public class SettingsController {
         return "redirect:/main";
     }
 
-
+    @PostMapping("/user/{login}/editUserAccounts")
     public String editUserAccounts(@PathVariable String login,
                                    @RequestParam(required = false) String name,
                                    @RequestParam(required = false) String birthdate,
