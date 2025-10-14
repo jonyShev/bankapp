@@ -1,4 +1,4 @@
-package com.jonyshev.exchange;
+package com.jonyshev.transfer;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

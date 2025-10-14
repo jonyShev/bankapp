@@ -4,9 +4,13 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Data
 @Builder
+@Getter
+@Setter
 public class UserCreateRequest {
     @NotBlank
     @Size(min = 3, max = 64)
