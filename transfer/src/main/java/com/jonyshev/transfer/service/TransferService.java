@@ -18,31 +18,29 @@ public class TransferService {
 
     private static final RoundingMode RM = RoundingMode.HALF_UP;
 
-    private final ExchangeClient exchangeClient;   // Map<String, BigDecimal> rates()
-    private final AccountsClient accountsClient;   // add/sub(String, String, BigDecimal)
-    private final BlockerClient blockerClient;     // check(String, String, BigDecimal) -> "" | error
+    private final ExchangeClient exchangeClient;
+    private final AccountsClient accountsClient;
+    private final BlockerClient blockerClient;
     private final NotificationsClient notificationsClient;
 
     public record Result(boolean ok, String error) {
     }
 
     public Result transferSelf(String login, String fromCur, String toCur, BigDecimal amount) {
-        var result =  doTransfer(login, login, fromCur, toCur, amount);
-        if (result.ok){
+        var result = doTransfer(login, login, fromCur, toCur, amount);
+        if (result.ok) {
             notificationsClient.send(EventType.TRANSFER_SELF, login, fromCur + " to " + toCur + " " + amount);
         }
         return result;
     }
 
     public Result transferToOther(String fromLogin, String toLogin, String fromCur, String toCur, BigDecimal amount) {
-        var result =  doTransfer(fromLogin, toLogin, fromCur, toCur, amount);
-        if (result.ok){
+        var result = doTransfer(fromLogin, toLogin, fromCur, toCur, amount);
+        if (result.ok) {
             notificationsClient.send(EventType.TRANSFER_TO, fromLogin + " to " + toLogin, fromCur + " to " + toCur + " " + amount);
         }
         return result;
     }
-
-    // ===== helpers =====
 
     private Result doTransfer(String fromLogin, String toLogin, String fromCur, String toCur, BigDecimal amount) {
         // антифрод по «списываемой» стороне
@@ -60,10 +58,6 @@ public class TransferService {
         return new Result(true, "");
     }
 
-    /**
-     * Конвертация из from → to через базовую валюту (курсы — RUB за 1 единицу).
-     * Возвращает null, если нет нужных курсов.
-     */
     private BigDecimal convert(BigDecimal amount, String from, String to, Map<String, BigDecimal> rates) {
         if (from.equals(to)) return amount.setScale(4, RM);
 

@@ -1,4 +1,4 @@
-package com.jonyshev.exchange.generator.service;
+package com.jonyshev.exchange.generator.client;
 
 
 import com.jonyshev.commons.model.Currency;
@@ -14,7 +14,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @Component
 @RequiredArgsConstructor
-public class RatePusher {
+public class ExchangeClient {
 
     private final WebClient.Builder http;
 
