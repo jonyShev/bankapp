@@ -44,6 +44,11 @@
             <groupId>com.jonyshev</groupId>
             <artifactId>commons</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
 </project>
