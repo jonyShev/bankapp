@@ -1,6 +1,5 @@
 package com.jonyshev.transfer.config;
 
-import com.jonyshev.commons.client.NotificationsClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,10 +33,4 @@ public class WebClientConfig {
         oauth.setDefaultClientRegistrationId("transfer");
         return oauth;
     }
-
-    @Bean
-    NotificationsClient notificationsClient(WebClient.Builder http) {
-        return new NotificationsClient(http);
-    }
-
 }

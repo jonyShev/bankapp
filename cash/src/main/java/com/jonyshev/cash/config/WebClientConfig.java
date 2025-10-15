@@ -1,6 +1,5 @@
 package com.jonyshev.cash.config;
 
-import com.jonyshev.commons.client.NotificationsClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,11 +32,6 @@ public class WebClientConfig {
         var oauth = new ServletOAuth2AuthorizedClientExchangeFilterFunction(manager);
         oauth.setDefaultClientRegistrationId("cash");
         return oauth;
-    }
-
-    @Bean
-    NotificationsClient notificationsClient(WebClient.Builder http) {
-        return new NotificationsClient(http);
     }
 
 }

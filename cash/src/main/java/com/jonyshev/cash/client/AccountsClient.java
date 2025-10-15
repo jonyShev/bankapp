@@ -1,6 +1,5 @@
 package com.jonyshev.cash.client;
 
-import com.jonyshev.commons.client.NotificationsClient;
 import com.jonyshev.commons.model.EventType;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;

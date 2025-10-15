@@ -1,4 +1,4 @@
-package com.jonyshev.commons.client;
+package com.jonyshev.transfer.client;
 
 import com.jonyshev.commons.model.EventType;
 import com.jonyshev.commons.model.NotificationRequest;

@@ -1,10 +1,10 @@
 package com.jonyshev.transfer.service;
 
-import com.jonyshev.commons.client.NotificationsClient;
 import com.jonyshev.commons.model.EventType;
 import com.jonyshev.transfer.client.AccountsClient;
 import com.jonyshev.transfer.client.BlockerClient;
 import com.jonyshev.transfer.client.ExchangeClient;
+import com.jonyshev.transfer.client.NotificationsClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
