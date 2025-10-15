@@ -5,6 +5,7 @@ import com.jonyshev.commons.model.Currency;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -14,6 +15,11 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @Component
 @RequiredArgsConstructor
+@ConditionalOnProperty(
+        value = "exchange.scheduling.enabled",
+        havingValue = "true",
+        matchIfMissing = true
+)
 public class ExchangeClient {
 
     private final WebClient.Builder http;
