@@ -1,0 +1,13 @@
+spring:
+  cloud:
+    consul:
+      enabled: false
+      config:
+        enabled: false
+        import-check:
+          enabled: false
+    discovery:
+      enabled: false
+    service-registry:
+      auto-registration:
+        enabled: false

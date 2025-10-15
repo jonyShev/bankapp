@@ -1,0 +1,31 @@
+spring:
+  task:
+    scheduling:
+      enabled: false   # <--- полностью отключает @Scheduled в тестах
+  cloud:
+    consul:
+      enabled: false
+      config:
+        enabled: false
+        import-check:
+          enabled: false
+    discovery:
+      enabled: false
+    service-registry:
+      auto-registration:
+        enabled: false
+
+# фиктивные клиенты, чтобы не было реальных вызовов
+clients:
+  keycloak:
+    base-url: http://localhost:0
+  exchange:
+    base-url: http://localhost:0
+
+logging:
+  level:
+    io.netty.resolver.dns.macos: ERROR
+    io.github.resilience4j.spring6: WARN
+exchange:
+  scheduling:
+    enabled: false
